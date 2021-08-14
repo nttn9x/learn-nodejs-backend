@@ -1,7 +1,7 @@
 import UserModel, { User } from "models/user.model";
 
-export const find = async () => {
-  return await UserModel.find();
+export const find = async (conditions?: any) => {
+  return await UserModel.find(conditions);
 };
 
 export const get = async (id: string) => {

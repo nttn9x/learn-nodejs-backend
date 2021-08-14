@@ -3,6 +3,7 @@ import api from "routers";
 import logger from "utils/logger.util";
 
 import loggerMiddleware from "middleware/logger.middleware";
+
 import { errorHandlerMiddleware } from "middleware/error.middleware";
 
 const app = express();
@@ -13,7 +14,6 @@ export const runServer = () => {
 
   // middleware
   app.use(loggerMiddleware);
-
   //api
   app.use("/api", api);
 

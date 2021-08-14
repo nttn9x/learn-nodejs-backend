@@ -18,6 +18,8 @@ export const create = async (
   next: NextFunction
 ) => {
   try {
+    console.log(req.body);
+
     const user = await userService.create(req.body);
 
     res.json(user);

@@ -8,6 +8,9 @@ import { errorHandlerMiddleware } from "middleware/error.middleware";
 const app = express();
 
 export const runServer = () => {
+  // parse application/json
+  app.use(express.json());
+
   // middleware
   app.use(loggerMiddleware);
 

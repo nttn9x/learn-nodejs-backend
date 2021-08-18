@@ -11,6 +11,8 @@ me.forEach((status: string) => {
   logger.info(`.. ${status}`);
 });
 
+// cherry 1
+
 dotenv.config({ path: __dirname + "/.env" });
 logger.info("✅ Dotenv");
 

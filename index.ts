@@ -30,4 +30,3 @@ mongoose.connect(
     runServer();
   }
 );
-// Hello

@@ -1,10 +1,11 @@
 import express from "express";
-import * as controller from "controllers/user.controller";
 import authMiddleware from "middleware/auth.middleware";
+
+import * as controller from "./user.controller";
 
 const router = express.Router();
 
-router.use(authMiddleware);
+// router.use(authMiddleware);
 
 router.get("/", controller.find);
 router.post("/", controller.create);

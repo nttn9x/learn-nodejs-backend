@@ -16,7 +16,7 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
   try {
     //@ts-ignore
     jwt.verify(token, process.env.JWT_KEY);
-  } catch (err) {
+  } catch (err: any) {
     logger.error(err);
 
     return res.status(StatusCodes.FORBIDDEN).end();

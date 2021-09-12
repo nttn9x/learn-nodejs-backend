@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { StatusCodes } from "http-status-codes";
 import _size from "lodash/size";
 
-import * as userService from "services/user.service";
+import * as userService from "routers/v1/user/user.service";
 
 export const login = async (
   req: Request,

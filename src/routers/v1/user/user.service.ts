@@ -1,4 +1,4 @@
-import UserModel, { User } from "models/user.model";
+import UserModel, { User } from "./user.model";
 
 export const find = async (conditions?: any) => {
   return await UserModel.find(conditions);

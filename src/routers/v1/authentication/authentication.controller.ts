@@ -12,17 +12,20 @@ export const login = async (
 ) => {
   try {
     const { email, password } = req.body;
+    console.log(email, password);
 
-    const users = await userService.find({ email, password });
-    if (_size(users) < 1) {
+    const user = await userService.findOne({ email, password });
+
+    if (!user) {
       res.status(StatusCodes.UNAUTHORIZED).end();
+      return;
     }
-    const user = users[0];
 
     const secretKey = process.env.JWT_KEY;
 
     if (!secretKey) {
       res.end();
+      return;
     }
 
     //@ts-ignore

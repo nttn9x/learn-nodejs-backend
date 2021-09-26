@@ -24,7 +24,7 @@ export const runServer = () => {
 
   app.listen(process.env.SERVER_PORT, () => {
     logger.info(
-      `✅ Server is running at https://localhost:${process.env.SERVER_PORT}`
+      `✅ Server is running at http://localhost:${process.env.SERVER_PORT}`
     );
   });
 };

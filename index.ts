@@ -10,8 +10,7 @@ logger.info("⛷ ⛱ ⛰ ⛳ Start app!!! ⛺ ⛹  ⛸ ⛷");
 me.forEach((status: string) => {
   logger.info(`.. ${status}`);
 });
-// chery 1
-// chery 2
+
 dotenv.config({ path: __dirname + "/.env" });
 logger.info("✅ Dotenv");
 

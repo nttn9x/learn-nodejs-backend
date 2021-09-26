@@ -4,7 +4,7 @@ import * as userService from "./user.service";
 
 export const find = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const users = await userService.find();
+    const users = await userService.find(req.query);
 
     res.json(users);
   } catch (err) {
@@ -57,7 +57,6 @@ export const update = async (
 ) => {
   try {
     const user = await userService.update(req.params.id, req.body);
-    console.log(user);
 
     res.json(user);
   } catch (err) {

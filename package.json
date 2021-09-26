@@ -5,7 +5,8 @@
   "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "NODE_PATH=./src nodemon --config nodemon.json index.ts"
+    "start": "NODE_PATH=./src nodemon --config nodemon.json index.ts",
+    "debug": "NODE_PATH=./src nodemon --config nodemon.json --inspect index.ts"
   },
   "author": "",
   "license": "ISC",

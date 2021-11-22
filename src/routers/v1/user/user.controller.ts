@@ -1,65 +1,34 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
+import { catchAsync } from "utils/error.util";
 
 import * as userService from "./user.service";
 
-export const find = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const users = await userService.find(req.query);
+export const find = catchAsync(async (req: Request, res: Response) => {
+  const users = await userService.find(req.query);
 
-    res.json(users);
-  } catch (err) {
-    next(err);
-  }
-};
+  res.json(users);
+});
 
-export const get = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const users = await userService.get(req.params.id);
+export const get = catchAsync(async (req: Request, res: Response) => {
+  const users = await userService.get(req.params.id);
 
-    res.json(users);
-  } catch (err) {
-    next(err);
-  }
-};
+  res.json(users);
+});
 
-export const remove = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    await userService.remove(req.params.id);
+export const remove = catchAsync(async (req: Request, res: Response) => {
+  await userService.remove(req.params.id);
 
-    res.end();
-  } catch (err) {
-    next(err);
-  }
-};
+  res.end();
+});
 
-export const create = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const user = await userService.create(req.body);
+export const create = catchAsync(async (req: Request, res: Response) => {
+  const user = await userService.create(req.body);
 
-    res.json(user);
-  } catch (err) {
-    next(err);
-  }
-};
+  res.json(user);
+});
 
-export const update = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const user = await userService.update(req.params.id, req.body);
+export const update = catchAsync(async (req: Request, res: Response) => {
+  const user = await userService.update(req.params.id, req.body);
 
-    res.json(user);
-  } catch (err) {
-    next(err);
-  }
-};
+  res.json(user);
+});

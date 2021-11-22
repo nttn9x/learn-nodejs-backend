@@ -22,7 +22,8 @@ mongoose.connect(
   },
   function (err) {
     if (err) {
-      logger.info("❌ DB connection unsuccessful!", err);
+      logger.info("❌ DB connection unsuccessful!" + err);
+      process.exit(1);
       return;
     }
     logger.info("✅ DB connection successful!");

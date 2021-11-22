@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { StatusCodes } from "http-status-codes";
 import _size from "lodash/size";
 
-import * as userService from "routers/v1/user/user.service";
+import UserModel from "../user/user.model";
 
 export const login = async (
   req: Request,
@@ -12,11 +12,15 @@ export const login = async (
 ) => {
   try {
     const { email, password } = req.body;
-    console.log(email, password);
 
-    const user = await userService.findOne({ email, password });
-
+    const user = await UserModel.findOne({ email }).select("+password");
     if (!user) {
+      res.status(StatusCodes.UNAUTHORIZED).end();
+      return;
+    }
+
+    const correct = await user.correctPassword(password, user.password);
+    if (!correct) {
       res.status(StatusCodes.UNAUTHORIZED).end();
       return;
     }

@@ -5,7 +5,7 @@ import * as controller from "./user.controller";
 
 const router = express.Router();
 
-// router.use(authMiddleware);
+router.use(authMiddleware);
 
 router.get("/", controller.find);
 router.post("/", controller.create);

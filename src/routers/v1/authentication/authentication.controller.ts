@@ -3,6 +3,9 @@ import jwt from "jsonwebtoken";
 import { StatusCodes } from "http-status-codes";
 import _size from "lodash/size";
 
+import { AppError } from "utils/error.util";
+import { HTTP_CODE } from "constants/common.constant";
+
 import UserModel from "../user/user.model";
 
 export const login = async (
@@ -38,6 +41,31 @@ export const login = async (
     });
 
     res.json({ user, token });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const forgotPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { email } = req.body;
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return next(
+        new AppError(
+          "Opps! There is no user with email address",
+          HTTP_CODE.UNAUTHORIZED
+        )
+      );
+    }
+
+    // 2. Generate new pwd
+
+    // 3. Send an email
   } catch (err) {
     next(err);
   }

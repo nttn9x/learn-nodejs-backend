@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import logger from "utils/logger.util";
 import { catchAsync } from "utils/error.util";
 
-import UserModel from "../routers/v1/user/user.model";
+import UserModel from "../user/user.model";
 
 export const verifyToken = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {

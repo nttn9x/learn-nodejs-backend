@@ -18,5 +18,5 @@ export const errorHandlerMiddleware = (
     res.status(StatusCodes.INTERNAL_SERVER_ERROR);
   }
 
-  res.json(err);
+  res.status(err.statusCode || 500).json(err);
 };

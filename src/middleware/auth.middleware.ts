@@ -3,25 +3,34 @@ import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 
 import logger from "utils/logger.util";
+import { catchAsync } from "utils/error.util";
 
-const verifyToken = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.headers["authorization"];
+import UserModel from "../routers/v1/user/user.model";
 
-  if (!token) {
-    logger.error(`❌ Forbidden ${req.originalUrl}`);
+export const verifyToken = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const token = req.headers["authorization"];
 
-    return res.status(StatusCodes.FORBIDDEN).end();
-  }
+    if (!token) {
+      logger.error(`❌ Forbidden ${req.originalUrl}`);
 
-  try {
+      return res.status(StatusCodes.FORBIDDEN).end();
+    }
+
     //@ts-ignore
-    jwt.verify(token, process.env.JWT_KEY);
-  } catch (err: any) {
-    logger.error(err);
+    const decoded = jwt.verify(token, process.env.JWT_KEY);
+    const user = await UserModel.findById(decoded.id);
 
-    return res.status(StatusCodes.FORBIDDEN).end();
+    if (!user) {
+      return res.status(StatusCodes.FORBIDDEN).end();
+    }
+    if (user.changePasswordAfter(decoded.iat)) {
+      return res.status(StatusCodes.FORBIDDEN).end();
+    }
+
+    //@ts-ignore
+    req.user = user;
+
+    return next();
   }
-  return next();
-};
-
-export default verifyToken;
+);

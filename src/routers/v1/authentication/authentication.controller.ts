@@ -3,10 +3,17 @@ import jwt from "jsonwebtoken";
 import { StatusCodes } from "http-status-codes";
 import _size from "lodash/size";
 
-import { AppError } from "utils/error.util";
+import { AppError, catchAsync } from "utils/error.util";
 import { HTTP_CODE } from "constants/common.constant";
 
 import UserModel from "../user/user.model";
+
+const signToken = ({ email, id }) => {
+  //@ts-ignore
+  return jwt.sign({ email, id }, process.env.JWT_KEY, {
+    expiresIn: process.env.JWT_EXPIRED,
+  });
+};
 
 export const login = async (
   req: Request,
@@ -35,10 +42,7 @@ export const login = async (
       return;
     }
 
-    //@ts-ignore
-    const token = jwt.sign({ email, id: user._id }, secretKey, {
-      expiresIn: process.env.JWT_EXPIRED,
-    });
+    const token = signToken({ email, id: user._id });
 
     res.json({ user, token });
   } catch (err) {
@@ -46,12 +50,8 @@ export const login = async (
   }
 };
 
-export const forgotPassword = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
+export const forgotPassword = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
     const { email } = req.body;
     const user = await UserModel.findOne({ email });
     if (!user) {
@@ -62,11 +62,45 @@ export const forgotPassword = async (
         )
       );
     }
-
-    // 2. Generate new pwd
+    // 2. Generate random token
+    const resetToken = user.createPasswordResetToken();
+    await user.save();
 
     // 3. Send an email
-  } catch (err) {
-    next(err);
+
+    res.json(user);
   }
-};
+);
+
+export const updatePassword = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    //@ts-ignore
+    const user: any = await UserModel.findById(req.user._id).select(
+      "+password"
+    );
+    const correct = await user?.correctPassword(
+      req.body.passwordCurrent,
+      user.password
+    );
+
+    if (!correct) {
+      return next(
+        new AppError("Your current password is wrong.", HTTP_CODE.UNAUTHORIZED)
+      );
+    }
+
+    user.password = req.body.password;
+    user.passwordConfirm = req.body.passwordConfirm;
+    await user.save();
+
+    const token = signToken({ email: user.email, id: user._id });
+
+    res.status(200).json({
+      status: "success",
+      token,
+      data: {
+        user,
+      },
+    });
+  }
+);

@@ -67,18 +67,19 @@ export const forgotPassword = catchAsync(
     await user.save();
 
     // 3. Send an email
-
     res.json(user);
   }
 );
 
 export const updatePassword = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    // Get
     //@ts-ignore
     const user: any = await UserModel.findById(req.user._id).select(
       "+password"
     );
 
+    // Check password
     const correct = await user?.correctPassword(
       req.body.passwordCurrent,
       user.password
@@ -95,6 +96,8 @@ export const updatePassword = catchAsync(
     await user.save();
 
     const token = signToken({ email: user.email, id: user._id });
+
+    delete user.password;
 
     res.status(200).json({
       status: "success",

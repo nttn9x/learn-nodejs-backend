@@ -1,5 +1,5 @@
 import express from "express";
-import { verifyToken } from "./auth.middleware";
+import { verifyToken } from "routers/v1/middleware/auth.middleware";
 
 import * as controller from "./authentication.controller";
 

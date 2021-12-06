@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from "express";
 export class AppError extends Error {
   msg?: string;
   statusCode?: number;
+  status?: string;
   isMyOperation: boolean;
 
   constructor(msg: string, statusCode: number) {
@@ -11,6 +12,7 @@ export class AppError extends Error {
 
     this.msg = msg;
     this.statusCode = statusCode;
+    this.status = statusCode && statusCode >= 400 ? "Error" : "Success";
     this.isMyOperation = false;
 
     // Maintains proper stack trace for where our error was thrown (only available on V8)

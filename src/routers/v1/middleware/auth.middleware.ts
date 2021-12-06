@@ -21,10 +21,8 @@ export const verifyToken = catchAsync(
     const decoded = jwt.verify(token, process.env.JWT_KEY);
     const user = await UserModel.findById(decoded.id);
 
-    if (!user) {
-      return res.status(StatusCodes.FORBIDDEN).end();
-    }
-    if (user.changePasswordAfter(decoded.iat)) {
+    // If user has changed pwd then have to login again
+    if (!user || user.changePasswordAfter(decoded.iat)) {
       return res.status(StatusCodes.FORBIDDEN).end();
     }
 

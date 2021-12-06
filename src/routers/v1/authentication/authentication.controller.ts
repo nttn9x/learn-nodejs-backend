@@ -78,6 +78,7 @@ export const updatePassword = catchAsync(
     const user: any = await UserModel.findById(req.user._id).select(
       "+password"
     );
+
     const correct = await user?.correctPassword(
       req.body.passwordCurrent,
       user.password

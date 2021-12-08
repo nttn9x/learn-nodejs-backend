@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
+import { filterObject } from "utils/common.util";
 import { catchAsync } from "utils/error.util";
 
+import { User } from "./user.model";
 import * as userService from "./user.service";
 
 export const find = catchAsync(async (req: Request, res: Response) => {
@@ -28,7 +30,9 @@ export const create = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const update = catchAsync(async (req: Request, res: Response) => {
-  const user = await userService.update(req.params.id, req.body);
+  const filteredBody = filterObject<User>(req.body, "name", "email");
+
+  const user = await userService.update(req.params.id, filteredBody);
 
   res.json(user);
 });

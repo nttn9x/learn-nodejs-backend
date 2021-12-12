@@ -8,10 +8,35 @@ import { HTTP_CODE } from "constants/common.constant";
 
 import UserModel from "../user/user.model";
 
-const signToken = ({ email, id }) => {
-  //@ts-ignore
-  return jwt.sign({ email, id }, process.env.JWT_KEY, {
-    expiresIn: process.env.JWT_EXPIRED,
+const signToken = ({ res, user }) => {
+  const token = jwt.sign(
+    { email: user.email, id: user._id },
+    //@ts-ignore
+    process.env.JWT_KEY,
+    {
+      expiresIn: process.env.JWT_EXPIRED,
+    }
+  );
+
+  const cookieOptions: any = {
+    expires: new Date(Date.now() * 24 * 60 * 60 * 1000),
+  };
+
+  if (process.env.NODE_ENV === "production") {
+  }
+  cookieOptions.secure = true;
+  cookieOptions.httpOnly = true;
+
+  // Remove password
+  delete user.password;
+
+  res.cookie("UFO", token, cookieOptions);
+  res.status(200).json({
+    status: "success",
+    token,
+    data: {
+      user,
+    },
   });
 };
 
@@ -42,9 +67,7 @@ export const login = async (
       return;
     }
 
-    const token = signToken({ email, id: user._id });
-
-    res.json({ user, token });
+    signToken({ user, res });
   } catch (err) {
     next(err);
   }
@@ -95,16 +118,6 @@ export const updatePassword = catchAsync(
     user.passwordConfirm = req.body.passwordConfirm;
     await user.save();
 
-    const token = signToken({ email: user.email, id: user._id });
-
-    delete user.password;
-
-    res.status(200).json({
-      status: "success",
-      token,
-      data: {
-        user,
-      },
-    });
+    signToken({ res, user });
   }
 );

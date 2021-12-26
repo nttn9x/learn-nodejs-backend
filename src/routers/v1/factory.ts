@@ -9,7 +9,7 @@ export const findData = <T extends unknown>(model: Model<T>) =>
   catchAsync(async (req: Request, res: Response) => {
     const params: any = req.params;
 
-    const doc = await apiBuilder(model.find(params), req.query);
+    const doc = await apiBuilder(model.find(params), req.query, []);
 
     res.json({
       status: "success",

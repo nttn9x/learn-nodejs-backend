@@ -12,6 +12,7 @@ export const create = Factory.createData(
   OrganizationModel,
   /* allowedFields */ ["name"]
 );
+
 export const update = Factory.updateData(
   OrganizationModel,
   /* allowedFields */ ["name"]

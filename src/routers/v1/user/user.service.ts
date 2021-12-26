@@ -18,7 +18,10 @@ export const create = async (data: User) => {
 };
 
 export const update = async (id: string, data: User) => {
-  return await UserModel.findByIdAndUpdate(id, data, { new: true });
+  return await UserModel.findByIdAndUpdate(id, data, {
+    new: true,
+    runValidators: true,
+  });
 };
 
 export const remove = async (id: string) => {

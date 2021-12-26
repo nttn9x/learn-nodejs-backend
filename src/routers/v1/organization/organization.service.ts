@@ -18,7 +18,10 @@ export const create = async (data: Organization) => {
 };
 
 export const update = async (id: string, data: Organization) => {
-  return await OrganizationModel.findByIdAndUpdate(id, data, { new: true });
+  return await OrganizationModel.findByIdAndUpdate(id, data, {
+    new: true,
+    runValidators: true,
+  });
 };
 
 export const remove = async (id: string) => {

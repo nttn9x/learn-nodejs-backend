@@ -1,5 +1,8 @@
-export const apiBuilder = async (query: any, params: any = {}) => {
-  const conditions = { ...params };
+export const apiBuilder = async (
+  model,
+  { queryParams = {}, routeParams = {} }: any
+) => {
+  let conditions = { ...queryParams };
 
   ["page", "sort", "limit", "fields"].forEach(
     (k: string) => delete conditions[k]
@@ -9,14 +12,16 @@ export const apiBuilder = async (query: any, params: any = {}) => {
     conditions[k] = new RegExp(conditions[k], "i");
   });
 
-  query = query.find(conditions);
+  conditions = { ...conditions, ...routeParams };
 
-  if (params.fields) {
-    query = query.select(params.fields.split(",").join(" "));
+  let query = model.find(conditions);
+
+  if (queryParams.fields) {
+    query = query.select(queryParams.fields.split(",").join(" "));
   }
 
-  if (params.sort) {
-    query = query.sort(params.sort);
+  if (queryParams.sort) {
+    query = query.sort(queryParams.sort);
   }
 
   return await query;

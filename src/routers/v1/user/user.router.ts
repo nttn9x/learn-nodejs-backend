@@ -3,7 +3,7 @@ import { verifyToken } from "routers/v1/middleware/auth.middleware";
 
 import * as controller from "./user.controller";
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router.post("/", controller.create);
 router.get("/", verifyToken, controller.find);

@@ -16,10 +16,7 @@ logger.info("✅ Dotenv");
 
 mongoose.connect(
   `mongodb://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}?authSource=admin`,
-  {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-  },
+  {},
   function (err) {
     if (err) {
       logger.info("❌ DB connection unsuccessful!" + err);

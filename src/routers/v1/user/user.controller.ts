@@ -6,7 +6,11 @@ import { User } from "./user.model";
 import * as userService from "./user.service";
 
 export const find = catchAsync(async (req: Request, res: Response) => {
-  const users = await userService.find(req.query);
+  const routeParams: any = {};
+  if (req.params.organizationId) {
+    routeParams.organization = req.params.organizationId;
+  }
+  const users = await userService.find({ queryParams: req.query, routeParams });
 
   res.json(users);
 });
@@ -30,7 +34,12 @@ export const create = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const update = catchAsync(async (req: Request, res: Response) => {
-  const filteredBody = filterObject<User>(req.body, "name", "email");
+  const filteredBody = filterObject<User>(
+    req.body,
+    "name",
+    "email",
+    "organization"
+  );
 
   const user = await userService.update(req.params.id, filteredBody);
 

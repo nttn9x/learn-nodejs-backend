@@ -2,6 +2,8 @@ import { Schema, model } from "mongoose";
 import bcryptjs from "bcryptjs";
 import crypto from "crypto";
 
+import { Organization } from "../organization/organization.model";
+
 export interface User {
   name: string;
   email: string;
@@ -14,12 +16,14 @@ export interface User {
   correctPassword: Function;
   createPasswordResetToken: Function;
   changePasswordAfter: Function;
+  organization: Organization;
 }
+
 const schema = new Schema<User>({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true, select: false },
-  passwordChangeAt: Date,
+  passwordChangeAt: { type: Date, select: false },
   passwordConfirm: {
     type: String,
     required: true,
@@ -35,6 +39,10 @@ const schema = new Schema<User>({
   passwordResetToken: String,
   passwordResetExpire: Date,
   avatar: String,
+  organization: {
+    type: Schema.Types.ObjectId,
+    ref: "Organization",
+  },
 });
 
 schema.pre("save", function (next) {

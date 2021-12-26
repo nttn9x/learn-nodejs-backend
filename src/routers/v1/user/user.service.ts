@@ -1,8 +1,8 @@
 import UserModel, { User } from "./user.model";
 import { apiBuilder } from "utils/api-builder.util";
 
-export const find = async (query?: any) => {
-  return await apiBuilder(UserModel, query);
+export const find = async (options: any) => {
+  return await apiBuilder(UserModel, options);
 };
 
 export const findOne = async (conditions?: any) => {
@@ -10,7 +10,7 @@ export const findOne = async (conditions?: any) => {
 };
 
 export const get = async (id: string) => {
-  return await UserModel.findById(id);
+  return await UserModel.findById(id).populate("organization");
 };
 
 export const create = async (data: User) => {

@@ -27,15 +27,18 @@ const signToken = ({ res, user }) => {
   cookieOptions.secure = true;
   cookieOptions.httpOnly = true;
 
-  // Remove password
-  delete user.password;
+  const { _id, email, name } = user;
 
   res.cookie("UFO", token, cookieOptions);
   res.status(200).json({
     status: "success",
     token,
     data: {
-      user,
+      user: {
+        _id,
+        email,
+        name,
+      },
     },
   });
 };

@@ -1,4 +1,6 @@
 import express from "express";
+import xss from "xss-clean";
+import mongoSanitize from "express-mongo-sanitize";
 import api from "routers";
 
 import logger from "utils/logger.util";
@@ -12,6 +14,12 @@ const app = express();
 export const runServer = () => {
   // parse application/json
   app.use(express.json());
+
+  // Data sanitization again NoSQL injection
+  app.use(mongoSanitize());
+
+  // Data sanitization again XSS
+  app.use(xss());
 
   // middleware
   app.use(loggerMiddleware);

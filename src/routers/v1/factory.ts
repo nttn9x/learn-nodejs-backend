@@ -3,6 +3,19 @@ import { Model, UpdateQuery } from "mongoose";
 
 import { filterObject } from "utils/common.util";
 import { catchAsync } from "utils/error.util";
+import { apiBuilder } from "utils/api-builder.util";
+
+export const findData = <T extends unknown>(model: Model<T>) =>
+  catchAsync(async (req: Request, res: Response) => {
+    const params: any = req.params;
+
+    const doc = await apiBuilder(model.find(params), req.query);
+
+    res.json({
+      status: "success",
+      data: doc,
+    });
+  });
 
 export const getData = <T extends unknown>(
   model: Model<T>,

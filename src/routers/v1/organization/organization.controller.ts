@@ -4,13 +4,10 @@ import { catchAsync } from "utils/error.util";
 import OrganizationModel from "./organization.model";
 import * as OrganizationService from "./organization.service";
 
-export const find = catchAsync(async (req: Request, res: Response) => {
-  const Organizations = await OrganizationService.find(req.query);
-
-  res.json(Organizations);
-});
+export const find = Factory.findData(OrganizationModel);
 
 export const get = Factory.getData(OrganizationModel);
+
 export const create = Factory.createData(
   OrganizationModel,
   /* allowedFields */ ["name"]

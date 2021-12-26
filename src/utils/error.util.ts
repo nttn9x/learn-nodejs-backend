@@ -13,7 +13,7 @@ export class AppError extends Error {
     this.msg = msg;
     this.statusCode = statusCode;
     this.status = statusCode && statusCode >= 400 ? "Error" : "Success";
-    this.isMyOperation = false;
+    this.isMyOperation = true;
 
     // Maintains proper stack trace for where our error was thrown (only available on V8)
     if (Error.captureStackTrace) {

@@ -1,6 +1,6 @@
 export const filterObject = <T extends unknown>(
   obj: any,
-  ...allowedFields: any
+  allowedFields: any
 ): T => {
   const newObj = {} as T;
   Object.keys(obj).forEach((el: string) => {

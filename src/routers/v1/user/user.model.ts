@@ -2,9 +2,9 @@ import { Schema, model } from "mongoose";
 import bcryptjs from "bcryptjs";
 import crypto from "crypto";
 
-import { Organization } from "../organization/organization.model";
+import { IOrganization } from "../organization/organization.model";
 
-export interface User {
+export interface IUser {
   name: string;
   email: string;
   password: string;
@@ -16,10 +16,10 @@ export interface User {
   correctPassword: Function;
   createPasswordResetToken: Function;
   changePasswordAfter: Function;
-  organization: Organization;
+  organization: IOrganization;
 }
 
-const schema = new Schema<User>({
+const schema = new Schema<IUser>({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true, select: false },
@@ -97,6 +97,6 @@ schema.methods.changePasswordAfter = function (jwtTimestamp) {
   return false;
 };
 
-const UserModel = model<User>("User", schema);
+const UserModel = model<IUser>("User", schema);
 
 export default UserModel;

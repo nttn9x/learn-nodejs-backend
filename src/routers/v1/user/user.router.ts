@@ -6,9 +6,13 @@ import * as controller from "./user.controller";
 const router = express.Router({ mergeParams: true });
 
 router.post("/", controller.create);
-router.get("/", verifyToken, controller.find);
-router.get("/:id", verifyToken, controller.get);
-router.patch("/:id", verifyToken, controller.update);
-router.delete("/:id", verifyToken, controller.remove);
+
+router.use(verifyToken);
+
+// Need to login
+router.get("/", controller.find);
+router.get("/:id", controller.get);
+router.patch("/:id", controller.update);
+router.delete("/:id", controller.remove);
 
 export default router;
